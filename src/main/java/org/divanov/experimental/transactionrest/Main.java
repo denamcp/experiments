@@ -15,7 +15,8 @@ public class Main {
     public static void main(String[] args) {
         final AccountStorage accountsMemoryStorage = new AccountsMemoryStorage();
         final Service service = new Service(accountsMemoryStorage);
-        TransactionRestApi restApi = new TransactionRestApi(service);
-
+        final TransactionRestApi restApi = new TransactionRestApi(service);
+        final Pippo pippo = new Pippo(restApi);
+        pippo.start();
     }
 }

@@ -24,10 +24,17 @@ repositories {
 
 dependencies {
     compile group: 'ro.pippo', name: 'pippo-core', version: '1.9.0'
-    compile group: 'ro.pippo', name: 'pippo-core', version: '1.9.0'
+    compile group: 'ro.pippo', name: 'pippo-jetty', version: '1.9.0'
+    //compile group: 'ro.pippo', name: 'pippo-freemarker', version: '1.9.0'
+    //compile group: 'ro.pippo', name: 'pippo-jackson', version: '1.9.0'
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.0'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.0'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    //TODO or test compile scope?
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.5'
+    //compile group: 'ro.pippo', name: 'pippo-test', version: '1.9.0'
+    testCompile('org.junit.jupiter:junit-jupiter-api:5.2.0')
+    testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.0')
+    //testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
 apply plugin: 'java'
