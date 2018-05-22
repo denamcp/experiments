@@ -12,5 +12,20 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Account {
     public String id;
     public Double amount;
-    public AtomicLong atomicAmountVariant;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
 }

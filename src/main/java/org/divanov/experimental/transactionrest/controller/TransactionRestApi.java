@@ -6,6 +6,8 @@ import org.divanov.experimental.transactionrest.service.Service;
 import org.divanov.experimental.transactionrest.storage.Account;
 import org.divanov.experimental.transactionrest.storage.AccountsMemoryStorage;
 import ro.pippo.core.Application;
+import ro.pippo.core.HttpConstants;
+import ro.pippo.gson.GsonEngine;
 
 /**
  * User: Denis_Ivanov
@@ -24,11 +26,12 @@ public class TransactionRestApi extends Application {
     @Override
     protected void onInit() {
 
+        registerContentTypeEngine(GsonEngine.class);
+
         GET("/", routeContext -> {
             routeContext.send("Account transfer experimental demo. \n Use /account to operate with accounts," +
                     " /transaction to transfer money.");
         });
-
 
         //TODO argument
         GET("/account", routeContext -> {

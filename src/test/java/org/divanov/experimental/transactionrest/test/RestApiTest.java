@@ -5,6 +5,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.divanov.experimental.transactionrest.controller.TransactionRestApi;
 import org.divanov.experimental.transactionrest.service.Service;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import ro.pippo.core.Pippo;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,6 +36,8 @@ public class RestApiTest {
     public static void beforeAll() throws Exception {
         client = HttpClientBuilder.create().build();
         final AccountStorage accountsMemoryStorage = new AccountsMemoryStorage();
+        accountsMemoryStorage.createAccount("Ivanov", 1000);
+        accountsMemoryStorage.createAccount("Petrov", 2000);
         final Service service = new Service(accountsMemoryStorage);
         restApi = new TransactionRestApi(service);
         pippo = new Pippo(restApi);
@@ -42,16 +46,20 @@ public class RestApiTest {
 
     @Test
     public void testConnection() throws IOException {
-        // Given
-        String name = "";
-        HttpUriRequest request = new HttpGet("http://localhost:8338/" + name);
-
-        // When
-        HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
-
-        // Then
+        final HttpUriRequest request = new HttpGet("http://localhost:8338/");
+        final HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
         assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
 
+    }
+
+    @Test
+    public void testGet() throws IOException, URISyntaxException {
+        final String endpointName = "account";
+        final URIBuilder builder = new URIBuilder("http://localhost:8338/" + endpointName);
+        builder.setParameter("id", "Petrov");
+        final HttpUriRequest request = new HttpGet(builder.build());
+        final HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
     }
 
     @AfterAll

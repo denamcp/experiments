@@ -64,27 +64,4 @@ public class Service {
         }
 
     }
-
-    //TODO implement
-
-    /**
-     * Variant with atomic numbers
-     *
-     * @param idFrom         id of account to withdraw money
-     * @param idTo           id of account to put money
-     * @param transferAmount amount in single currency
-     * @return is ok
-     */
-    public boolean transferUsingAtomic(final String idFrom, final String idTo, final Double transferAmount) {
-        boolean ok = false;
-        final Account accountFrom = accountsStorage.getAccount(idFrom);
-        final Account accountTo = accountsStorage.getAccount(idTo);
-        //TODO concurrency - make more thin synchronization (Atomic)
-        if (null != accountFrom && null != accountTo) {
-            //accountFrom.atomicAmountVariant.compareAndSet(); //TODO what to use
-            ok = true;
-        }
-        return ok;
-    }
-
 }
