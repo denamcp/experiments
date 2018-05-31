@@ -31,8 +31,8 @@ public class Service {
      * @param transferAmount amount in single currency
      * @return is ok
      */
-    public boolean transferSyncAccount(final String idFrom, final String idTo, final Double transferAmount) {
-        boolean ok = false;
+    public TransferResult transferSyncAccount(final String idFrom, final String idTo, final Double transferAmount) {
+        TransferResult ok = TransferResult.FAIL;
         final Account accountFrom = accountsStorage.getAccount(idFrom);
         final Account accountTo = accountsStorage.getAccount(idTo);
         if (null != accountFrom && null != accountTo) {
@@ -41,15 +41,13 @@ public class Service {
             if (compare > 0) {
                 synchronized (accountFrom) {
                     synchronized (accountTo) {
-                        transfer(accountFrom, accountTo, transferAmount);
-                        ok = true;
+                        ok = transfer(accountFrom, accountTo, transferAmount);
                     }
                 }
             } else if (compare < 0) {
                 synchronized (accountTo) {
                     synchronized (accountFrom) {
-                        transfer(accountFrom, accountTo, transferAmount);
-                        ok = true;
+                        ok = transfer(accountFrom, accountTo, transferAmount);
                     }
                 }
             }
@@ -57,11 +55,16 @@ public class Service {
         return ok;
     }
 
-    private void transfer(final Account accountFrom, final Account accountTo, final Double transferAmount) {
+    private TransferResult transfer(final Account accountFrom, final Account accountTo, final Double transferAmount) {
+        TransferResult result = TransferResult.FAIL;
         if (accountFrom.amount > transferAmount) {
             accountFrom.amount -= transferAmount;
             accountTo.amount += transferAmount;
+            result = TransferResult.OK;
+        } else {
+            result = TransferResult.NOT_ENOUGH;
         }
-
+        return result;
     }
+
 }

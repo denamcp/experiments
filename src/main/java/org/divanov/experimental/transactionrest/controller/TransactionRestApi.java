@@ -3,10 +3,10 @@ package org.divanov.experimental.transactionrest.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.divanov.experimental.transactionrest.service.Service;
+import org.divanov.experimental.transactionrest.service.TransferResult;
 import org.divanov.experimental.transactionrest.storage.Account;
 import org.divanov.experimental.transactionrest.storage.AccountsMemoryStorage;
 import ro.pippo.core.Application;
-import ro.pippo.core.HttpConstants;
 import ro.pippo.gson.GsonEngine;
 
 /**
@@ -16,6 +16,10 @@ import ro.pippo.gson.GsonEngine;
  */
 public class TransactionRestApi extends Application {
     private static final Logger logger = LogManager.getLogger("TransactionRestApi");
+    public static final String IDFROM = "idfrom";
+    public static final String IDTO = "idto";
+    public static final String TRANSFERAMOUNT = "transferamount";
+    public static final String TRANSACTION = "transaction";
     final Service service;
     final AccountsMemoryStorage memoryStorage = new AccountsMemoryStorage();
 
@@ -30,7 +34,7 @@ public class TransactionRestApi extends Application {
 
         GET("/", routeContext -> {
             routeContext.send("Account transfer experimental demo. \n Use /account to operate with accounts," +
-                    " /transaction to transfer money.");
+                    " /" + TRANSACTION + " to transfer money.");
         });
 
         //TODO argument
@@ -50,21 +54,27 @@ public class TransactionRestApi extends Application {
             }
         });
 
-        PUT("/transaction", routeContext -> {
-            final String idFrom = routeContext.getParameter("idfrom").toString();
-            final String idTo = routeContext.getParameter("idto").toString();
+        POST("/" + TRANSACTION, routeContext -> {
+            final String idFrom = routeContext.getParameter(IDFROM).toString();
+            final String idTo = routeContext.getParameter(IDTO).toString();
             Double transferAmount = null;
             try {
-                transferAmount = routeContext.getParameter("transferamount").toDouble();
+                transferAmount = routeContext.getParameter(TRANSFERAMOUNT).toDouble();
             } catch (NumberFormatException nfe) {
                 logger.warn("Wrong number format for transfer. {}", nfe);
                 //TODO logging
             }
+            TransferResult ok = TransferResult.FAIL;
+            logger.info("Transferring " + transferAmount + " from " + idFrom + " to " + idTo);
             if (null != idFrom && null != idTo && null != transferAmount) {
-                boolean ok = service.transferSyncAccount(idFrom, idTo, transferAmount);
-                if (ok) {
-                    routeContext.getResponse().ok().send(null);
-                }
+                ok = service.transferSyncAccount(idFrom, idTo, transferAmount);
+            }
+            if (TransferResult.OK.equals(ok)) {
+                routeContext.getResponse().ok().send(null);
+                logger.warn("Succesful to transfer " + transferAmount + " from " + idFrom + " to " + idTo);
+            } else {
+                routeContext.getResponse().accepted().send(null);
+                logger.warn("Failed to transfer " + transferAmount + " from " + idFrom + " to " + idTo);
             }
         });
     }
