@@ -15,7 +15,7 @@ import ro.pippo.gson.GsonEngine;
  * Time: 11:59
  */
 public class TransactionRestApi extends Application {
-    private static final Logger logger = LogManager.getLogger("TransactionRestApi");
+    private static final Logger logger = LogManager.getLogger(TransactionRestApi.class);
     public static final String IDFROM = "idfrom";
     public static final String IDTO = "idto";
     public static final String TRANSFERAMOUNT = "transferamount";
