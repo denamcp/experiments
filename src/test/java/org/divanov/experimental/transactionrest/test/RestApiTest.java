@@ -50,7 +50,6 @@ public class RestApiTest {
         final HttpUriRequest request = new HttpGet("http://localhost:8338/");
         final HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
         assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
-
     }
 
     @Test
