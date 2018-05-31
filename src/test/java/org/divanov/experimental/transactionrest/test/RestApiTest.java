@@ -87,7 +87,7 @@ public class RestApiTest {
         final HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
         assertEquals(HttpStatus.SC_ACCEPTED, httpResponse.getStatusLine().getStatusCode());
         assertEquals(Double.valueOf(2000), accountsMemoryStorage.getAccount("Petrov").amount);
-        assertEquals(Double.valueOf(2000), accountsMemoryStorage.getAccount("Ivanov").amount);
+        assertEquals(Double.valueOf(1000), accountsMemoryStorage.getAccount("Ivanov").amount);
     }
 
     @AfterAll
