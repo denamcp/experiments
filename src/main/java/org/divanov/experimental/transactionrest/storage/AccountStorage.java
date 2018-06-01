@@ -7,5 +7,6 @@ package org.divanov.experimental.transactionrest.storage;
  */
 public interface AccountStorage {
     Account getAccount(String id);
+    Account putAccount(final Account account);
     Account createAccount(String id, double initialAmount);
 }

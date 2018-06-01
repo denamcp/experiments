@@ -13,6 +13,14 @@ public class Account {
     public String id;
     public Double amount;
 
+    public Account() {
+    }
+
+    public Account(String id, Double amount) {
+        this.id = id;
+        this.amount = amount;
+    }
+
     public String getId() {
         return id;
     }

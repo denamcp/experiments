@@ -34,7 +34,13 @@ public class TransactionRestApi extends Application {
 
         GET("/", routeContext -> {
             routeContext.send("Account transfer experimental demo. \n Use /account to operate with accounts," +
-                    " /" + TRANSACTION + " to transfer money.");
+                    " /" + TRANSACTION + " to transfer money.\n\n" +
+                    "Example:\n" +
+                    "PUT http://localhost:8338/account?id=Petrov&amount=2000 \n"+
+                    "PUT http://localhost:8338/account?id=Ivanov&amount=1000 \n" +
+                    "POST http://localhost:8338/transaction?idfrom=Petrov&idto=Ivanov&transferamount=100 \n" +
+                    "GET http://localhost:8338/account?id=Ivanov"
+            );
         });
 
         //TODO argument
@@ -48,9 +54,21 @@ public class TransactionRestApi extends Application {
 
         PUT("/account", routeContext -> {
             final String id = routeContext.getParameter("id").toString();
+            final String amount = routeContext.getParameter("amount").toString();
             if (null != id) {
                 final Account account = service.getAccount(id);
-                routeContext.json().send(account);
+                if (null != account) {
+                    routeContext.getResponse().conflict().send(account);
+                } else {
+                    try {
+                        Double amountDouble = Double.valueOf(amount);
+                        final Account newAccount = new Account(id, amountDouble);
+                        service.putAccount(newAccount);
+                        routeContext.getResponse().ok().send(null); //better code?
+                    } catch (NumberFormatException nfe) {
+                        routeContext.getResponse().badRequest().send(null);
+                    }
+                }
             }
         });
 

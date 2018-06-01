@@ -5,6 +5,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -60,6 +61,18 @@ public class RestApiTest {
         final HttpUriRequest request = new HttpGet(builder.build());
         final HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
         assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
+    }
+
+    @Test
+    public void test_putAccount_createsAcc() throws IOException, URISyntaxException {
+        final String endpointName = "account";
+        final URIBuilder builder = new URIBuilder("http://localhost:8338/" + endpointName);
+        builder.setParameter("id", "NewOne");
+        builder.setParameter("amount", "1500");
+        final HttpUriRequest request = new HttpPut(builder.build());
+        final HttpResponse httpResponse = HttpClientBuilder.create().build().execute(request);
+        assertEquals(HttpStatus.SC_OK, httpResponse.getStatusLine().getStatusCode());
+        assertEquals(Double.valueOf(1500), accountsMemoryStorage.getAccount("NewOne").amount);
     }
 
     @Test

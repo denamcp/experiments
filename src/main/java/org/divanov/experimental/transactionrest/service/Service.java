@@ -22,6 +22,10 @@ public class Service {
         return accountsStorage.getAccount(id);
     }
 
+    public void putAccount(final Account account) {
+        accountsStorage.putAccount(account);
+    }
+
     /**
      * Variant with same-ordered synchronization by sorted IDs.
      * Should be stable, but have extra blocking that we could possibly avoid in other approaches.
