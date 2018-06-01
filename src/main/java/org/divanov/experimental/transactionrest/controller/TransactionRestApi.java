@@ -43,7 +43,6 @@ public class TransactionRestApi extends Application {
             );
         });
 
-        //TODO argument
         GET("/account", routeContext -> {
             final String id = routeContext.getParameter("id").toString();
             if (null != id) {
@@ -80,7 +79,6 @@ public class TransactionRestApi extends Application {
                 transferAmount = routeContext.getParameter(TRANSFERAMOUNT).toDouble();
             } catch (NumberFormatException nfe) {
                 logger.warn("Wrong number format for transfer. {}", nfe);
-                //TODO logging
             }
             TransferResult ok = TransferResult.FAIL;
             logger.info("Transferring " + transferAmount + " from " + idFrom + " to " + idTo);

@@ -11,11 +11,6 @@ public class AccountsMemoryStorage implements AccountStorage {
 
     private ConcurrentHashMap<String, Account> accounts = new ConcurrentHashMap<>();
 
-//    { //TODO remove, for test purpose only
-//        createAccount("Ivanov", 1000);
-//        createAccount("Petrov", 2000);
-//    }
-
     @Override
     public Account getAccount(final String id) {
         return accounts.get(id);
